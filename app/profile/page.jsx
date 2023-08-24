@@ -10,6 +10,19 @@ const MyProfile = () => {
   const { data: session } = useSession()
   const [posts, setPosts] = useState([])
   const Router = useRouter()
+  
+  useEffect(() => { 
+    const fetchPosts = async () => {
+      const response = await fetch(`/api/user/${session?.user.id}/posts`)
+      const data = await response.json()
+  
+      setPosts(data)
+    }
+    console.log();
+    if (session?.user.id) {
+      fetchPosts()
+    }
+  },[])
 
   const handleEdit = async (post) => {
     Router.push(`/update-prompt?id=${post._id}`)
@@ -31,18 +44,6 @@ const MyProfile = () => {
     }
   }
 
-  useEffect(() => { 
-    const fetchPosts = async () => {
-      const response = await fetch(`/api/user/${session?.user.id}/posts`)
-      const data = await response.json()
-
-      setPosts(data)
-    }
-
-    if (session?.user.id) {
-      fetchPosts()
-    }
-  }, [])
 
   return (
     <div>
